@@ -7,7 +7,13 @@ class AccountsConfig(AppConfig):
     name = 'accounts'
 
     def ready(self):
-        # makemigrations သို့မဟုတ် အခြား command များ ခေါ်ချိန်တွင် auto-run မဖြစ်အောင် စစ်ပေးခြင်း
+        # 1. Signals များကို Load လုပ်ရန် (Server run ချိန်၊ migrate ချိန် အားလုံးအတွက် အလုပ်လုပ်ရန် import ကို အပြင်ဘက်ထုတ်ထားခြင်းက ပိုကောင်းပါတယ်)
+        try:
+            import accounts.signals
+        except ImportError:
+            pass
+
+        # 2. makemigrations သို့မဟုတ် အခြား command များ ခေါ်ချိန်တွင် Permission auto-create မဖြစ်အောင် စစ်ပေးခြင်း
         if 'runserver' not in sys.argv and 'gunicorn' not in sys.argv:
             return
 

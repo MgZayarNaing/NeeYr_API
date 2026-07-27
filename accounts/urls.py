@@ -30,6 +30,14 @@ from accounts.views.subscription_plan_views import (
     plan_delete,
 )
 
+from accounts.views.owner_profile_views import (
+    owner_list,
+    owner_create,
+    owner_detail,
+    owner_update,
+    owner_delete,
+)
+
 urlpatterns = [
     path('login/', user_login, name='user-login'),
     path('register/', user_register, name='user-register'),
@@ -56,4 +64,15 @@ urlpatterns = [
     path('plans/<uuid:plan_id>/', plan_detail, name='plan_detail'),
     path('plans/<uuid:plan_id>/update/', plan_update, name='plan_update'),
     path('plans/<uuid:plan_id>/delete/', plan_delete, name='plan_delete'),
+
+    # Owner Self-Management Endpoints
+    path('profile/', owner_detail, name='owner_profile_detail'),           # Get own profile
+    path('profile/create/', owner_create, name='owner_profile_create'),     # Create own profile
+    path('profile/update/', owner_update, name='owner_profile_update'),     # Update own profile
+
+    # Admin Management Endpoints
+    path('owners/', owner_list, name='owner_list'),                         # Get all owners list
+    path('owners/<uuid:owner_id>/', owner_detail, name='owner_detail_admin'), # Get specific owner detail
+    path('owners/<uuid:owner_id>/update/', owner_update, name='owner_update_admin'), # Update specific owner
+    path('owners/<uuid:owner_id>/delete/', owner_delete, name='owner_delete'), # Delete owner
 ]
