@@ -87,8 +87,8 @@ class SubscriptionPlan(models.Model):
         editable=False
     )
     name = models.CharField(max_length=50)  # Basic, Pro, Enterprise
-    max_branches = models.IntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    max_branches = models.IntegerField(default=1, null=True,blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=0)
     duration_days = models.IntegerField(default=30)
     is_active = models.BooleanField(default=True)
 

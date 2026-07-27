@@ -22,6 +22,14 @@ from accounts.views.group_views import (
     group_delete
 )
 
+from accounts.views.subscription_plan_views import (
+    plan_list,
+    plan_detail,
+    plan_create,
+    plan_update,
+    plan_delete,
+)
+
 urlpatterns = [
     path('login/', user_login, name='user-login'),
     path('register/', user_register, name='user-register'),
@@ -40,4 +48,12 @@ urlpatterns = [
     path('groups/<uuid:group_id>/', group_detail, name='group_detail'),
     path('groups/<uuid:group_id>/update/', group_update, name='group_update'),
     path('groups/<uuid:group_id>/delete/', group_delete, name='group_delete'),
+
+
+    # Subscription Plan Endpoints
+    path('plans/', plan_list, name='plan_list'),
+    path('plans/create/', plan_create, name='plan_create'),
+    path('plans/<uuid:plan_id>/', plan_detail, name='plan_detail'),
+    path('plans/<uuid:plan_id>/update/', plan_update, name='plan_update'),
+    path('plans/<uuid:plan_id>/delete/', plan_delete, name='plan_delete'),
 ]
