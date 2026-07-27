@@ -161,3 +161,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ==========================================
+# MMPay Configuration
+# ==========================================
+MMPAY_CONFIG = {
+    'appId': 'MM44868467',
+    'publishableKey': 'pk_test_6585e28f506800b94817a74c27cfc7eb5c9cec92f8328659d2752ba77f46a0d0',
+    'secretKey': 'sk_test_1eaec278762a01b8fbb1b13aecdc88c63a5cbd1e491f743e0b1e01928b523a14',
+    'apiBaseUrl': 'https://ezapi.myanmyanpay.com'
+}

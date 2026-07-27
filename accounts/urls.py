@@ -38,6 +38,14 @@ from accounts.views.owner_profile_views import (
     owner_delete,
 )
 
+
+from accounts.views.payment_views import (
+    initiate_payment,
+    mmpay_webhook,
+    payment_transaction_list,
+    subscription_history_list,
+)
+
 urlpatterns = [
     path('login/', user_login, name='user-login'),
     path('register/', user_register, name='user-register'),
@@ -75,4 +83,9 @@ urlpatterns = [
     path('owners/<uuid:owner_id>/', owner_detail, name='owner_detail_admin'), # Get specific owner detail
     path('owners/<uuid:owner_id>/update/', owner_update, name='owner_update_admin'), # Update specific owner
     path('owners/<uuid:owner_id>/delete/', owner_delete, name='owner_delete'), # Delete owner
+
+    path('payments/initiate/', initiate_payment, name='initiate_payment'),
+    path('webhooks/mmpay/', mmpay_webhook, name='mmpay_webhook'),
+    path('payments/', payment_transaction_list, name='payment_transaction_list'),
+    path('subscriptions/history/', subscription_history_list, name='subscription_history_list'),
 ]
