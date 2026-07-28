@@ -72,7 +72,38 @@ def initiate_payment(request):
 
 
 # ==========================================
-# 2. MMPay Webhook / Callback Handler
+# 2. Check / Retrieve Payment Status API (NEW)
+# ==========================================
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_mmpay_payment_status(request, order_id):
+    """
+    Order ID ဖြင့် MMPay Server ဆီသို့ တိုက်ရိုက်သွားရောက်စစ်ဆေးခြင်း (Retrieve Payment)
+    - URL: /api/payments/check-status/<order_id>/
+    """
+    try:
+        # MMPay SDK မှ get() ကို ခေါ်ဆိုခြင်း
+        payment_details = MMPay.get({ "orderId": order_id })
+
+        return Response({
+            "message": "ငွေပေးချေမှု အချက်အလက်များ အောင်မြင်စွာ ရရှိပါပြီ။",
+            "order_id": payment_details.get('orderId'),
+            "status": payment_details.get('status'),
+            "condition": payment_details.get('condition'),
+            "amount": payment_details.get('amount'),
+            "transactionRefId": payment_details.get('transactionRefId'),
+            "vendorQrRefId": payment_details.get('vendorQrRefId'),
+            "raw_details": payment_details 
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({
+            "error": f"MMPay Retrieve Error: {str(e)}"
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ==========================================
+# 3. MMPay Webhook / Callback Handler
 # ==========================================
 def handle_success(tx):
     order_id = tx.get('orderId')
@@ -147,7 +178,7 @@ def mmpay_webhook(request):
 
 
 # ==========================================
-# 3. Transaction & History List Views
+# 4. Transaction & History List Views
 # ==========================================
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

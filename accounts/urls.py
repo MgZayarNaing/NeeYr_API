@@ -44,6 +44,7 @@ from accounts.views.payment_views import (
     mmpay_webhook,
     payment_transaction_list,
     subscription_history_list,
+    check_mmpay_payment_status
 )
 
 urlpatterns = [
@@ -84,8 +85,18 @@ urlpatterns = [
     path('owners/<uuid:owner_id>/update/', owner_update, name='owner_update_admin'), # Update specific owner
     path('owners/<uuid:owner_id>/delete/', owner_delete, name='owner_delete'), # Delete owner
 
-    path('payments/initiate/', initiate_payment, name='initiate_payment'),
-    path('webhooks/mmpay/', mmpay_webhook, name='mmpay_webhook'),
-    path('payments/', payment_transaction_list, name='payment_transaction_list'),
-    path('subscriptions/history/', subscription_history_list, name='subscription_history_list'),
+# 1. QR Code ထုတ်ယူရန် (Initiate Payment) - POST
+    path('payments/initiate/', initiate_payment, name='initiate-payment'),
+
+    # 2. Order ID ဖြင့် Payment အခြေအနေကို စစ်ဆေးရန် (Retrieve Payment) - GET
+    path('payments/check-status/<str:order_id>/', check_mmpay_payment_status, name='check-mmpay-status'),
+
+    # 3. MMPay Webhook / Callback လက်ခံရန် - POST
+    path('webhooks/mmpay/', mmpay_webhook, name='mmpay-webhook'),
+
+    # 4. ငွေပေးချေမှု မှတ်တမ်းများ ကြည့်ရှုရန် - GET
+    path('payments/transactions/', payment_transaction_list, name='payment-transaction-list'),
+
+    # 5. Subscription သက်တမ်းတိုး / ဝယ်ယူမှု ისတြီများ ကြည့်ရှုရန် - GET
+    path('payments/subscription-histories/', subscription_history_list, name='subscription-history-list'),
 ]
