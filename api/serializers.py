@@ -18,7 +18,7 @@ from .models import (
 class RegionStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegionState
-        fields = '__all__'
+        fields = ['id','name']
 
 
 class CitySerializer(serializers.ModelSerializer):
