@@ -59,6 +59,21 @@ class UserSerializer(serializers.ModelSerializer):
             'groups',
             'permissions'
         ]
+        read_only_fields = [
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'is_active',
+            'is_staff',
+            'is_superuser',
+            'is_owner',
+            'date_joined',
+            'last_login',
+            'groups',
+            'permissions'
+        ]
 
     def get_is_owner(self, obj):
         return hasattr(obj, 'owner_profile')

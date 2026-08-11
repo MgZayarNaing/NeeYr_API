@@ -22,7 +22,13 @@ class RegionStateSerializer(serializers.ModelSerializer):
         fields = ['id','name']
 
 
+class UUIDPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    def to_representation(self, value):
+        return str(super().to_representation(value))
+
+
 class CitySerializer(serializers.ModelSerializer):
+    region = UUIDPrimaryKeyRelatedField(queryset=RegionState.objects.all())
     region_detail = RegionStateSerializer(source='region', read_only=True)
 
     class Meta:
