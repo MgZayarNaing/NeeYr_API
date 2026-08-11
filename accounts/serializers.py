@@ -164,7 +164,7 @@ class PaymentTransactionSerializer(serializers.ModelSerializer):
 # ==========================================
 class OwnerSubscriptionHistorySerializer(serializers.ModelSerializer):
     owner_detail = OwnerProfileSerializer(source='owner', read_only=True)
-    plan = SubscriptionPlanSerializer(read_only=True)
+    plan_detail = SubscriptionPlanSerializer(source='plan', read_only=True)
     payment_transaction_detail = PaymentTransactionSerializer(source='payment_transaction', read_only=True)
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()
@@ -177,6 +177,7 @@ class OwnerSubscriptionHistorySerializer(serializers.ModelSerializer):
             'owner',
             'owner_detail',
             'plan',
+            'plan_detail',
             'payment_transaction',
             'payment_transaction_detail',
             'transaction_type',

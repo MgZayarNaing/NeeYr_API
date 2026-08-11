@@ -1,6 +1,7 @@
 from zoneinfo import ZoneInfo
 from rest_framework import serializers
 from django.db.models import Avg
+from django.utils import timezone  
 
 from .models import (
     RegionState,
@@ -53,6 +54,7 @@ class BranchReviewSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     created_at = serializers.SerializerMethodField()
     replied_at = serializers.SerializerMethodField()
+    rating = serializers.IntegerField(min_value=1, max_value=5)
 
     class Meta:
         model = BranchReview
@@ -68,6 +70,9 @@ class BranchReviewSerializer(serializers.ModelSerializer):
             'is_published',
             'created_at'
         ]
+        # NOTE: owner_reply ကို review ဖန်တီးချိန် (create) မှာ ends-user မပါဝင်စေရန်
+        # view (perform_create) ဘက်က တစ်ဆင့် read-only ပြုလုပ်ပေးရပါမည်။ owner ကိုယ်တိုင်
+        # reply ပြန်ချိန်မှသာ update endpoint ဖြင့် ဤ field ကို ရေးခွင့်ပေးပါ။
         read_only_fields = ['user', 'is_published']
 
     def get_created_at(self, obj):
@@ -79,6 +84,15 @@ class BranchReviewSerializer(serializers.ModelSerializer):
         if obj.replied_at:
             return obj.replied_at.astimezone(ZoneInfo("Asia/Yangon")).strftime("%Y-%m-%d %I:%M:%S %p")
         return None
+
+    def update(self, instance, validated_data):
+        # owner_reply အသစ် ပြောင်းလဲထည့်သွင်းလိုက်တိုင်း replied_at ကို serializer
+        # အတွင်းကနေတိုက်ရိုက် stamp လုပ်ပေးသည် (view ကနေ data['replied_at'] ထည့်ပေးလို့
+        # မရနိုင်ပါ — replied_at သည် SerializerMethodField ဖြစ်၍ အမြဲတမ်း read-only ဖြစ်သည်)
+        new_reply = validated_data.get('owner_reply', None)
+        if new_reply and new_reply != instance.owner_reply:
+            instance.replied_at = timezone.now()
+        return super().update(instance, validated_data)
 
 
 # 4. Main Branch Serializer
