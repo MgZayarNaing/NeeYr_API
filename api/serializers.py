@@ -52,7 +52,7 @@ class BranchImageSerializer(serializers.ModelSerializer):
 class BranchSocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = BranchSocialLink
-        fields = ['id', 'platform_name', 'url']
+        fields = ['id', 'branch','platform_name', 'url']
 
 
 # 3. Review Serializer
