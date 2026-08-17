@@ -11,7 +11,9 @@ from .models import (
     Branch,
     BranchImage,
     BranchSocialLink,
-    BranchReview
+    BranchReview,
+    Post,
+    SavedPost
 )
 
 
@@ -173,3 +175,27 @@ class BusinessBrandSerializer(serializers.ModelSerializer):
         if obj.created_at:
             return obj.created_at.astimezone(ZoneInfo("Asia/Yangon")).strftime("%Y-%m-%d %I:%M:%S %p")
         return None
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'content', 'created_at']
+
+
+class SavedPostSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    post_detail = PostSerializer(source='post', read_only=True)
+    created_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SavedPost
+        fields = ['id', 'user', 'username', 'post', 'post_detail', 'created_at']
+        read_only_fields = ['user']
+
+    def get_created_at(self, obj):
+        if obj.created_at:
+            return obj.created_at.astimezone(ZoneInfo("Asia/Yangon")).strftime("%Y-%m-%d %I:%M:%S %p")
+        return None
+
+

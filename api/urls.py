@@ -70,6 +70,13 @@ from api.views.branch_review_views import (
     get_branch_review_delete
 )
 
+from api.views.saved_post_views import (
+    get_saved_post_list,
+    get_saved_post_create,
+    get_saved_post_detail,
+    get_saved_post_delete
+)
+
 urlpatterns = [
     # Region State
     path('regions/', get_region_state_list, name='region-state-list'),
@@ -124,4 +131,9 @@ urlpatterns = [
     path('branch-reviews/<uuid:pk>/', get_branch_review_detail, name='branch-review-detail'),
     path('branch-reviews/<uuid:pk>/update/', get_branch_review_update, name='branch-review-update'),
     path('branch-reviews/<uuid:pk>/delete/', get_branch_review_delete, name='branch-review-delete'),
+
+    path('save-posts/', get_saved_post_list, name='saved-post-list'),
+    path('save-posts/create/', get_saved_post_create, name='saved-post-create'),
+    path('save-posts/<uuid:pk>/', get_saved_post_detail, name='saved-post-detail'),
+    path('save-posts/<uuid:pk>/delete/', get_saved_post_delete, name='saved-post-delete'),
 ]

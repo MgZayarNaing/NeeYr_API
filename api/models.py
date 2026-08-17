@@ -152,3 +152,30 @@ class BranchReview(models.Model):
 
     def __str__(self):
         return f"Review by {self.user.username} ({self.rating}★)"
+
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class SavedPost(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='saved_posts'
+    )
+    post = models.ForeignKey(
+        Post, 
+        on_delete=models.CASCADE, 
+        related_name='saved_by'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_saved_post')
+        ]
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user} saved {self.post_id}"
